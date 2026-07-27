@@ -1,0 +1,28 @@
+# Executables
+*.exe
+*.exe~
+
+# Object / Library files
+*.o
+*.obj
+*.lib
+*.a
+*.dll
+*.so
+*.dylib
+
+# IDE / Editor folders
+.vscode/
+.idea/
+.vs/
+cmake-build-*/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temp / Backup files
+*~
+*.swp
+*.bak
+
