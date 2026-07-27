@@ -27,47 +27,50 @@ int main()
 {
     int h[8]; // Index 1 to 7
 
-    cout << "Enter 4 data bits (d3 d5 d6 d7): ";
-    cin >> h[3] >> h[5] >> h[6] >> h[7];
+    cout << "Enter 4 data bits (d7 d6 d5 d3): ";
+    cin >> h[7];
+    cin >> h[6];
+    cin >> h[5];
+    cin >> h[3];
 
-    // Generate parity bits (Even Parity)
-    h[1] = h[3] ^ h[5] ^ h[7];
-    h[2] = h[3] ^ h[6] ^ h[7];
-    h[4] = h[5] ^ h[6] ^ h[7];
+    int r1 = h[3] ^ h[5] ^ h[7];
+    int r2 = h[3] ^ h[6] ^ h[7];
+    int r4 = h[5] ^ h[6] ^ h[7];
+
+    h[1] = r1;
+    h[2] = r2;
+    h[4] = r4;
 
     cout << "\nGenerated 7-bit Hamming Code: ";
-    for(int i = 1; i <= 7; i++)
+    for(int i = 7; i >  0; i--)
         cout << h[i];
 
     int r[8];
 
     cout << "\n\nEnter received 7-bit Hamming Code: ";
-    for(int i = 1; i <= 7; i++)
+    for(int i = 7; i > 0; i--)
         cin >> r[i];
 
-    // Check parity bits
-    int E1 = r[1] ^ r[3] ^ r[5] ^ r[7];
-    int E2 = r[2] ^ r[3] ^ r[6] ^ r[7];
-    int E3 = r[4] ^ r[5] ^ r[6] ^ r[7];
+    int c1 = r[1] ^ r[3] ^ r[5] ^ r[7];
+    int c2 = r[2] ^ r[3] ^ r[6] ^ r[7];
+    int c3 = r[4] ^ r[5] ^ r[6] ^ r[7];
 
-    int errorPos = E3 * 4 + E2 * 2 + E1;
+    int errorPos = c3 * 4 + c2 * 2 + c1;
 
-    if(errorPos == 0)
-    {
+    if(errorPos == 0) {
         cout << "\nNo Error Detected.";
-    }
-    else
-    {
+    } else {
         cout << "\nError Detected at Position: " << errorPos;
 
         // Correct the error
         r[errorPos] = !r[errorPos];
 
         cout << "\nCorrected Hamming Code: ";
-        for(int i = 1; i <= 7; i++)
+        for(int i = 7; i > 0; i--)
             cout << r[i];
     }
 
     cout << endl;
     return 0;
 }
+
