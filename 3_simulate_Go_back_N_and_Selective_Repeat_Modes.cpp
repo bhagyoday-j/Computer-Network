@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 void goBackN(int totalFrames, int windowSize, int errorFrame, int errorType) {
@@ -31,9 +32,9 @@ void goBackN(int totalFrames, int windowSize, int errorFrame, int errorType) {
         }
 
         if (hasError) {
-            cout << "\n[!] ERROR DETECTED at Frame " << failedAt << "!" << endl;
+            cout << "\nERROR DETECTED at Frame " << failedAt << endl;
             cout << "Receiver: Discarding all subsequent frames." << endl;
-            cout << "Sender: Timeout! Retransmitting ALL frames from Frame " << failedAt << " onwards...\n";
+            cout << "Sender: Retransmitting ALL frames from Frame " << failedAt << " onwards...\n";
             i = failedAt; // Go Back to N
         } else {
             i += sentCount; // Move window forward
@@ -58,23 +59,64 @@ void selectiveRepeat(int totalFrames, int windowSize, int errorFrame, int errorT
         }
 
         // Process Receiver Responses
-        for (int j = i; j < i + windowSize && j <= totalFrames; j++) {
-            if (ackStatus[j] == 1) continue;
+        // for (int j = i; j < i + windowSize && j <= totalFrames; j++) {
+        //     if (ackStatus[j] == 1) continue;
 
-            if (j == errorFrame && errorType != 0) {
-                cout << "\n[!] ERROR DETECTED at Frame " << j << "!" << endl;
-                cout << "Receiver: Frame " << j << " lost/corrupted. Sending NAK " << j << "." << endl;
-                cout << "Sender: Resending ONLY Frame " << j << "...\n";
-                errorType = 0; // Apply error once
+        //     if (j == errorFrame && errorType != 0) {
+        //         cout << "\nERROR DETECTED at Frame " << j << endl;
+        //         cout << "Receiver: Frame " << j << " lost/corrupted. Sending NAK " << j << "." << endl;
+        //         cout << "Sender: Resending ONLY Frame " << j << "...\n";
+        //         errorType = 0; // Apply error once
                 
-                // Immediately retransmit and ACK only this frame
-                cout << "Sender: Sent Frame " << j << " (Retransmission)" << endl;
-                cout << "Receiver: ACK " << j << " received by Sender." << endl;
-                ackStatus[j] = 1;
+        //         // Immediately retransmit and ACK only this frame
+        //         cout << "Sender: Sent Frame " << j << " (Retransmission)" << endl;
+        //         cout << "Receiver: ACK " << j << " received by Sender." << endl;
+        //         ackStatus[j] = 1;
+        //     } else {
+        //         cout << "Receiver: ACK " << j << " received by Sender." << endl;
+        //         ackStatus[j] = 1;
+        //     }
+        // }
+        // Phase 1: Send ACK/NAK for ALL frames in the window
+        vector<int> nakFrames;
+
+        for (int j = i; j < i + windowSize && j <= totalFrames; j++) {
+
+            if (ackStatus[j] == 1)
+                continue;
+
+            // Check whether this frame has an error
+            if (j == errorFrame && errorType != 0) {
+
+                cout << "Receiver: Frame " << j
+                    << " lost/corrupted. Sending NAK " << j << "." << endl;
+
+                nakFrames.push_back(j);
+
             } else {
-                cout << "Receiver: ACK " << j << " received by Sender." << endl;
+
+                cout << "Receiver: Frame " << j
+                    << " received correctly. Sending ACK " << j << "." << endl;
+
                 ackStatus[j] = 1;
             }
+        }
+
+        // Error is applied only once
+        errorType = 0;
+
+
+        // Phase 2: Retransmit ALL frames that received NAK
+        for (int j : nakFrames) {
+
+            cout << "\nSender: Retransmitting Frame " << j << "..." << endl;
+
+            cout << "Sender: Sent Frame " << j << " (Retransmission)" << endl;
+
+            cout << "Receiver: Frame " << j
+                << " received correctly. Sending ACK " << j << "." << endl;
+
+            ackStatus[j] = 1;
         }
 
         // Slide window forward past all ACKed frames
@@ -102,10 +144,9 @@ int main() {
 
     cout << "\nSelect Error Scenario to Simulate:\n";
     cout << "0. No Error\n";
-    cout << "1. Frame Lost\n";
-    cout << "2. ACK Lost\n";
-    cout << "3. Frame Contains Error\n";
-    cout << "Enter Choice (0-3): ";
+    cout << "1. Frame Lost or Frame Contains Error\n";
+   
+    cout << "Enter Choice : ";
     cin >> errorType;
 
     if (errorType != 0) {
