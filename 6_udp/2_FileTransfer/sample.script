@@ -1,0 +1,7 @@
+#!/bin/bash
+# Sample script file for UDP file transfer demonstration
+echo "Hello from UDP file transfer"
+echo "This is a script file being transferred via UDP"
+echo "Script files can contain executable commands"
+echo "UDP transfers datagrams independently"
+date

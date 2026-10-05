@@ -1,0 +1,5 @@
+This is a sample text file for UDP file transfer demonstration.
+It contains multiple lines to simulate a realistic text file.
+UDP is a connectionless protocol, unlike TCP which is connection-oriented.
+Each packet is sent independently without acknowledgment or flow control.
+This demonstrates the unreliable but fast nature of UDP.

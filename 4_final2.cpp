@@ -12,7 +12,7 @@ string intToIP(unsigned int ip)
            to_string(ip & 255);
 }
 
-// Print 32-bit binary 
+// Print 32-bit binary
 void printBinary32(unsigned int num)
 {
     for (int i = 31; i >= 0; i--)

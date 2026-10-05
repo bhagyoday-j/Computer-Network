@@ -1,0 +1,5 @@
+ID3T:This is a dummy audio file for UDP file transfer demonstration.
+It simulates an MP3 audio file with binary-like content.
+Audio files are typically larger and benefit from UDP's speed.
+Real MP3 files would contain actual audio data and metadata.
+This sample demonstrates transfer of binary audio content via UDP datagrams.

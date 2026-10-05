@@ -1,0 +1,5 @@
+This is a dummy video file for UDP file transfer demonstration.
+It simulates an MP4 video file with binary-like content.
+Video files are typically large and benefit from UDP's low latency.
+Real MP4 files would contain actual video and audio streams.
+This sample demonstrates transfer of binary video content via UDP datagrams.
